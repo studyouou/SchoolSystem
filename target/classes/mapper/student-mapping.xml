@@ -1,0 +1,88 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ougen.dao.StudentDao">
+    <select id="countNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_student
+    </select>
+    <select id="queryStudent" resultType="com.ougen.entity.Student" parameterType="int">
+        SELECT  *
+        FROM tb_student
+        WHERE
+        id=#{id}
+    </select>
+    <delete id="deleteStudentById" parameterType="int">
+        DELETE
+        FROM tb_student
+        WHERE
+        id=#{id}
+    </delete>
+    <update id="updateStudent" parameterType="Student">
+        UPDATE tb_student
+        SET
+        name=#{student.name} ,
+        sex=#{student.sex} ,
+        age=#{student.age} ,
+        password=#{student.password} ,
+        major=#{student.major} ,
+        inSchoolTime=#{student.inSchoolTime} ,
+        idCard=#{student.idCard} ,
+        num=#{student.num} ,
+        maxnum=#{student.maxnum}
+        WHERE
+        id=#{student.id}
+    </update>
+    <insert id="insertStudent" parameterType="com.ougen.entity.Student">
+        INSERT  ignore INTO
+        tb_student(name,age,sex,password,major,inSchoolTime,idCard,num,maxnum)
+        VALUES (#{student.name},#{student.age},#{student.sex},#{student.password},#{student.major},
+                 #{student.inSchoolTime},#{student.idCard},#{student.num},#{student.maxnum})
+    </insert>
+    <select id="queryAll" resultType="com.ougen.entity.Student">
+        SELECT *
+        FROM tb_student
+    </select>
+    <select id="queryByLimit" resultType="com.ougen.entity.Student">
+        SELECT *
+        FROM tb_student
+        limit #{offset},#{limit}
+    </select>
+
+    <update id="incrementNum">
+        UPDATE tb_student
+        SET num=num+1
+        WHERE
+        id=#{id}
+        AND num <![CDATA[ <= ]]> maxnum
+    </update>
+    <update id="reduceNum">
+        UPDATE tb_student
+        SET num=num-1
+        WHERE
+        id=#{id}
+        AND num > 0
+    </update>
+    <select id="querySubject"  resultType="com.ougen.entity.Subject">
+        SELECT
+        tsu.*
+        FROM tb_subject tsu
+        JOIN tb_student tst
+        JOIN tb_student_subject tss ON tss.studentId = tst.id
+        AND tsu.id = tss.subjectId
+        WHERE
+        tst.id=#{id}
+        limit #{offset},#{limit}
+    </select>
+    <insert id="insertToSS">
+        INSERT ignore
+        INTO tb_student_subject(studentId,subjectId)
+        VALUES (#{studentId},#{subjectId})
+    </insert>
+    <delete id="reduceToSS">
+        DELETE
+        FROM tb_student_subject
+        WHERE studentId=#{studentId}
+        AND subjectId=#{subjectId}
+    </delete>
+</mapper>

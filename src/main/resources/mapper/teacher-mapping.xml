@@ -1,0 +1,63 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ougen.dao.TeacherDao">
+    <select id="countNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_teacher
+    </select>
+    <select id="queryTeacher" resultType="Teacher">
+        SELECT *
+        FROM tb_teacher
+        WHERE
+        id=#{id}
+    </select>
+
+    <delete id="deleteTeacherById" >
+        DELETE
+        FROM tb_teacher
+        WHERE
+        id=#{id}
+    </delete>
+
+    <update id="updateTeacher" parameterType="Teacher">
+        UPDATE
+        tb_teacher
+        SET
+        name=#{teacher.name},
+        age=#{teacher.age},
+        sex=#{teacher.sex},
+        password=#{teacher.password},
+        major=#{teacher.major},
+        teachTime=#{teacher.teachTime},
+        idCard=#{teacher.idCard}
+        WHERE
+        id=#{teacher.id}
+    </update>
+    <insert id="insertTeacher" parameterType="Teacher">
+        INSERT ignore
+        INTO
+        tb_teacher(name,age,sex,password,major,teachTime,idCard)
+        VALUES(#{teacher.name},#{teacher.age},
+        #{teacher.sex},#{teacher.password},#{teacher.major}
+        ,#{teacher.teachTime},#{teacher.idCard})
+    </insert>
+    <select id="queryAll" resultType="Teacher">
+        select * from
+        tb_teacher
+    </select>
+    <select id="queryTeacherByLimit" resultType="Teacher">
+        SELECT *
+        FROM
+        tb_teacher
+        limit #{offset},#{limit}
+    </select>
+    <select id="querySubject" resultType="com.ougen.entity.Subject">
+        SELECT *
+        FROM tb_subject tsu
+        JOIN tb_teacher tte
+        JOIN tb_teacher_subject tts ON tts.teacherId=tte.id AND tts.subjectId=tsu.id
+        WHERE tte.id=#{id}
+        limit #{offset},#{limit}
+    </select>
+</mapper>

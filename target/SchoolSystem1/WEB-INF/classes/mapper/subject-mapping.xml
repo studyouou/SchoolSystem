@@ -1,0 +1,68 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ougen.dao.SubjectDao">
+    <select id="countNum" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM tb_subject
+    </select>
+    <select id="querySubject" resultType="Subject">
+        SELECT *
+        FROM tb_subject
+        WHERE
+        id=#{subject.id}
+    </select>
+    <delete id="deleteSubjectById" >
+        DELETE
+        FROM
+        tb_subject
+        WHERE
+        id=#{subject.id}
+    </delete>
+    <update id="updateSubject" parameterType="Subject">
+        UPDATE tb_subject
+        SET
+        name=#{subject.name},
+        hours=#{subject.hours},
+        teachername={subject.teacherName}
+        startTime=#{subject.startTime},
+        endTime=#{subject.endTime}
+        WHERE
+        id=#{subject.id}
+    </update>
+    <insert id="insertSubject" parameterType="Subject">
+        INSERT ignore
+        INTO
+        tb_subject(name,num,teachername,hours,startTime,endTime)
+        VALUES(#{subject.name},#{subject.num},#{subject.teacherName},#{subject.hours},#{subject.startTime},#{subject.endTime})
+    </insert>
+    <select id="queryAll" resultType="Subject">
+        SELECT *
+        FROM
+        tb_subject
+    </select>
+    <select id="queryByLimit" resultType="Subject">
+        SELECT *
+        FROM
+        tb_subject
+        limit #{offset},#{limit}
+    </select>
+    <update id="reduceNum">
+        UPDATE tb_subject
+        SET
+        num=num-1
+        WHERE
+        id=#{id}
+        AND num > 0
+
+    </update>
+    <update id="incrementNum">
+        UPDATE tb_subject
+        SET
+        num=num+1
+        WHERE
+        id=#{id}
+
+    </update>
+
+</mapper>
